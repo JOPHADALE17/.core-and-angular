@@ -14,5 +14,6 @@ namespace api.Inferfaces
         Task<Stock> CreateAsync(Stock StockModel);
         Task<Stock?> updateAsync(int Id, UpdateStockRequestDTO stockDto);
         Task<Stock?> DeleteAsync(int id);
+        Task<bool> StockExists(int id);
     }
 }
