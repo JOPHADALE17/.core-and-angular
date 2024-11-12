@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Inferfaces;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -34,6 +36,38 @@ namespace api.Repository
             await _context.SaveChangesAsync();
 
             return CommentModel;
+        }
+
+        public async Task<Comment?> UpdateAsync(int id, Comment commentModel)
+        {
+            var ExistingComment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (ExistingComment == null)
+            {
+                return null;
+            }
+
+            ExistingComment.Title = commentModel.Title;
+            ExistingComment.Content = commentModel.Content;
+
+            await _context.SaveChangesAsync();
+
+            return ExistingComment;
+        }
+
+        public async Task<Comment?> DeleteAsync(int id)
+        {
+            var ExistingComment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (ExistingComment == null)
+            {
+                return null;
+            }
+
+            _context.Comments.Remove(ExistingComment);
+            await _context.SaveChangesAsync();
+
+            return ExistingComment;
         }
     }
 }
